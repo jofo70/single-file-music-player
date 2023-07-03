@@ -188,10 +188,12 @@ li a:link, li a:visited, li a:hover{
  
             </ul>
                 <div id="dir-dialog" class="hidden">
-
-
-<!--- START comment out to remove "OTHER DIRECTORIES" functionality --->
                     <?php
+
+
+
+
+// START comment out to remove "OTHER DIRECTORIES" functionality 
                     //List all directories that are in the current directory with links to them in a table.
                     $dir = dirname(__FILE__);
                     $directories = glob("$dir/*", GLOB_ONLYDIR);
@@ -202,8 +204,9 @@ li a:link, li a:visited, li a:hover{
 // THE IF STAEMENT BELOW THIS LINE IS THE LINK TO GO UP ONE DIRECTORY.  COMMENT OUT IF NOT WANTED
                     //if the directory one up contains the file "music-player.php" then $musicPlayer = "music-player.php"
                     if(file_exists("$dir/../music-player.php")){
-                        echo "<li><a href=\"../music-player.php\">..</a></li>";
+                        $musicPlayer = "music-player.php";
                     }
+                    echo "<li><a href=\"../" . $musicPlayer . "\">..</a></li>";
 // THE IF STAEMENT ABOVE THIS LINE IS THE LINK TO GO UP ONE DIRECTORY.  COMMENT OUT IF NOT WANTED
 
                     foreach($directories as $directory){
@@ -217,11 +220,14 @@ li a:link, li a:visited, li a:hover{
                         echo "<li><a href=\"$directory/$musicPlayer\">$directory</a></li>";
                         }
                         echo "</li>";
+                        echo "</ul>";
+// END comment out to remove "OTHER DIRECTORIES" functionality --->
+
+
+
+
+
                     ?>
-<!--- END comment out to remove "OTHER DIRECTORIES" functionality --->
-
-
-
                 </div>
             </div>      
     <script>

@@ -1,6 +1,6 @@
 #Single File Music Player
 
-###This is a one file application that you can drop into any folder on a server that will use PHP 5+ to put all web playable files into a playlist.  It will also list all sub-directories, and let you navigate up a directory.
+###This is a one file audio player application that you can drop into any folder on a PHP 5+ server to put all web playable audio files into a playlist.  It will also list all sub-directories, and let you navigate up a directory.
 
 **BASIC USAGE AND FEATURES**
 - The user must interact (hit a play button) for the player to start.
@@ -16,3 +16,4 @@
 **TIPS**
 - Clear comments in the code indicate what to comment out if the "OTHER DIRECTORIES" functionality is not wanted.
 - Comments to remove the functionality to go up a directory are also there.
+- except for 404 errors, I haven't been able to test the error catching when it can't play a file.  It should mark it pink and start skipping over it.
