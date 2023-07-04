@@ -1,6 +1,6 @@
 #Single File Music Player
 
-###This is a one file audio player application that you can drop into any folder on a PHP 5+ server to put all web playable audio files in that directory into a playlist.  It will also list all sub-directories, and let you navigate up a directory.  I made this to share rough mixes with artists who recorded at my home studio and decided to polish it up and share.
+###This is a one file audio player application that you can drop into any folder on a PHP 5+ server to put all web playable audio files in that directory into a playlist.  It will also link to all sub-directories, and let you navigate up a directory.  I made this to share rough mixes with artists who recorded at my home studio and decided to polish it up and share.
 
 [Example](https://jofonet.net/SingleFileMusicPlayerExample/music-player.php)
 

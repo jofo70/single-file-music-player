@@ -155,7 +155,7 @@ li a:link, li a:visited, li a:hover{
             ?>  
         </h1>
 
-        <audio id="audio" tabindex="-1" src="" controls></audio>
+        <audio id="audio" src="" controls></audio>
         <div id="button-controls">
             <button id="previous">&#124;&#9668;&#9668;</button>
             <button id="back">&#9668;&#9668;</button>
@@ -178,6 +178,7 @@ li a:link, li a:visited, li a:hover{
 
             if(count($files) <= 0){
                 echo "<li>No audio files found</li>";
+                echo "<li><a href=\"../music-player.php\">>Back</li>";
             }else{
                 foreach ($files as $file): ?>
 
@@ -288,11 +289,11 @@ li a:link, li a:visited, li a:hover{
         }
 
         document.getElementById('audio').onerror = function(event) {
-            console.log('An error occurred:', event.target.error);
             catchAudioError(event.target.error);
         };
 
         function catchAudioError(err){
+            // if the player error was not just a slow network, play next song
             switch (err.code) {
                 case err.MEDIA_ERR_NETWORK:
                         return;
@@ -308,9 +309,11 @@ li a:link, li a:visited, li a:hover{
             }
         }
 
-        document.addEventListener("DOMContentLoaded", playFirstSong);
+        if(document.querySelector("#playlist li").innerHTML != "No audio files found"){
+            document.addEventListener("DOMContentLoaded", playFirstSong);
+        }
 
-        //Check if "dir-list" does not exist and if it does not, add "hidden" class to "OTHER DIRECTORIES" button
+        // hide the other directories button if there are no other directories
         if(!document.getElementById("dir-list")){
             document.getElementById("other-directories").classList.add("hidden");
         }
