@@ -13,7 +13,14 @@
 - The "OTHER DIRECTORIES" button will link to other sub-directories as well as a link to go up a directory when "music-player.php" exists there.
 - While searching for other directories, if it finds "music-player.php" it will link directly to that instead of the directory root.
 
+**DIRECTIONS**
+
+- Upload "music-player.php" into any directory to turn all playable audio files into a playlist.
+- Put another copy of "music-player.php" into any sub-directoies.
+- The directories tab will link directly to the sub-directory's copy of "music-player.php" if found.  Otherwise it will link to the root of the directory.
+
 **TIPS**
 - Clear comments in the code indicate what to comment out if the "OTHER DIRECTORIES" functionality is not wanted.
 - Comments to remove the functionality to go up a directory are also there.
 - except for 404 errors, I haven't been able to test the error catching when it can't play a file.  It should mark it pink and start skipping over it.
+- The code should be easy to alter to suit your needs for titles and styling
