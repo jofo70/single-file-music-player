@@ -172,7 +172,13 @@ li a:link, li a:visited, li a:hover{
             ini_set('display_errors', 1);
             $files = glob("*.{mp3,ogg,m4a,wav,flac,aac,webm,opus}", GLOB_BRACE);
             array_multisort(array_map('filemtime', $files), SORT_NUMERIC, SORT_DESC, $files);
-            foreach ($files as $file): ?>
+
+            // make if statement if the array length <0
+            if(count($files) < 0){
+                echo "<li>No files found</li>"; 
+                }else{
+                    foreach ($files as $file): ?>
+
                 <li data-src="<?php echo $file; ?>">
                     <div class="left-buttons">
                         <button class="move-up">&#9650;</button>
@@ -184,7 +190,10 @@ li a:link, li a:visited, li a:hover{
                 <div class="filename"><br /><?php echo $file; ?>
                 </div>
                 </li>
-            <?php endforeach; ?>
+            <?php 
+                    endforeach; 
+                }
+                ?>
  
             </ul>
                 <div id="dir-dialog" class="hidden">
@@ -193,7 +202,7 @@ li a:link, li a:visited, li a:hover{
 
 
 
-// START comment out to remove "OTHER DIRECTORIES" functionality 
+// START COMMENT OUT ---- TO REMOVE "OTHER DIRECTORIES" FUNCTIONALITY
                     //List all directories that are in the current directory with links to them in a table.
                     $dir = dirname(__FILE__);
                     $directories = glob("$dir/*", GLOB_ONLYDIR);
@@ -201,13 +210,11 @@ li a:link, li a:visited, li a:hover{
                     echo "<ul id='dir-list'>";
                     $musicPlayer = "";
 
-// THE IF STAEMENT BELOW THIS LINE IS THE LINK TO GO UP ONE DIRECTORY.  COMMENT OUT IF NOT WANTED
+// THE 2 STATEMENTS BELOW THIS LINE IS THE LINK TO GO UP ONE DIRECTORY.  COMMENT OUT IF NOT WANTED
                     //if the directory one up contains the file "music-player.php" then $musicPlayer = "music-player.php"
-                    if(file_exists("$dir/../music-player.php")){
-                        $musicPlayer = "music-player.php";
-                    }
+                    if(file_exists("$dir/../music-player.php")){$musicPlayer = "music-player.php";}
                     echo "<li><a href=\"../" . $musicPlayer . "\">..</a></li>";
-// THE IF STAEMENT ABOVE THIS LINE IS THE LINK TO GO UP ONE DIRECTORY.  COMMENT OUT IF NOT WANTED
+// THE 2 STATEMENTS ABOVE THIS LINE IS THE LINK TO GO UP ONE DIRECTORY.  COMMENT OUT IF NOT WANTED
 
                     foreach($directories as $directory){
                         $musicPlayer = "";
@@ -221,7 +228,7 @@ li a:link, li a:visited, li a:hover{
                         }
                         echo "</li>";
                         echo "</ul>";
-// END comment out to remove "OTHER DIRECTORIES" functionality --->
+// END COMMENT OUT ---- TO REMOVE "OTHER DIRECTORIES" FUNCTIONALITY
 
 
 
@@ -299,145 +306,94 @@ li a:link, li a:visited, li a:hover{
             }
         }
 
-        // run playFirstSong when html is ready
         document.addEventListener("DOMContentLoaded", playFirstSong);
 
-
-        //Check if "dir-list" does not exist and if not, add "hidden" class to "OTHER DIRECTORIES" button
+        //Check if "dir-list" does not exist and if it does not, add "hidden" class to "OTHER DIRECTORIES" button
         if(!document.getElementById("dir-list")){
             document.getElementById("other-directories").classList.add("hidden");
         }
 
-
-
         document.addEventListener("click", function(e){
             console.log(e.target);
             if(e.target.id == "previous"){
-                // get the previous song in the playlist
                 var previousSong = document.querySelector("#playlist li.active").previousElementSibling;
-                // if there is a previous song
                 if(previousSong){
-                    // get the data-src attribute from the previous song
                     var song = previousSong.getAttribute("data-src");
-                    // if the previous song has "err" class
                     if(song.classList.contains("err")){
                         song = song.previousSibling;
                     }
-                    // set the src attribute of the audio player to the data-src attribute of the previous song
                     document.querySelector("#audio").setAttribute("src", song);
-                    // set the text of the current song to the filename of the previous song from div with the class of filename
                     document.querySelector("#current-song").innerHTML = previousSong.querySelector(".filename").innerHTML;
-                    // remove the active class from the current song
                     if(document.querySelector("#playlist li.active")){ 
                         document.querySelector("#playlist li.active").classList.remove("active");
                     }
-                    // add the active class to the previous song
                     previousSong.classList.add("active");
-                    // play the previous song
                     document.querySelector("#audio").play();
                 }
-                // if there is not a previous song
                 else{
-                    // play the last song
                     var lastSong = document.querySelector("#playlist li:last-child");
-                    // get the data-src attribute from the last song
                     var song = lastSong.getAttribute("data-src");
-                    // set the src attribute of the audio player to the data-src attribute of the last song
                     document.querySelector("#audio").setAttribute("src", song);
-                    // set the text of the current song to the filename of the last song from div with the class of filename
                     document.querySelector("#current-song").innerHTML = lastSong.querySelector(".filename").innerHTML;
-                    // remove the active class from the current song
                     if(document.querySelector("#playlist li.active")){ 
                         document.querySelector("#playlist li.active").classList.remove("active");
                     }
-                    // add the active class to the last song
                     lastSong.classList.add("active");
-                    // play the last song
                     document.querySelector("#audio").play();
                 }
             }
-
 
             if(e.target.id == "next"){
                 playNextSong();
             };
 
             if(e.target.id == "back"){
-                // get the current time of the audio player
                 var currentTime = document.querySelector("#audio").currentTime;
-                // subtract 10 seconds from the current time
                 var newTime = currentTime - 5;
-                // set the current time of the audio player to the new time
                 document.querySelector("#audio").currentTime = newTime;
             };
-            // when the forward button is clicked go forward 10 seconds
+
             if(e.target.id == "forward"){
                 console.log("forward-Pressed")
-                // get the current time of the audio player
                 var currentTime = document.querySelector("#audio").currentTime;
-                // add 10 seconds to the current time
                 var newTime = currentTime + 5;
-                // set the current time of the audio player to the new time
                 document.querySelector("#audio").currentTime = newTime;
             };
             
             if(e.target.id == "loop"){
-                 // if the loop button has the class of button-selected
                 if(document.querySelector("#loop").classList.contains("button-selected")){
-                    // remove the class of button-selected
                     document.querySelector("#loop").classList.remove("button-selected");
                 }
-                // if the loop button does not have the class of button-selected
                 else{
-                    // add the class of button-selected
                     document.querySelector("#loop").classList.add("button-selected");
                 }
             }
 
-            // write an if statement that will toggle the player from play and pause when the target is the body
             if(e.target && e.target.tagName == "BODY"){
-                // if the audio player is paused
                 if(document.querySelector("#audio").paused){
-                    // play the audio player
                     document.querySelector("#audio").play();
                 }
-                // if the audio player is playing
                 else{
-                    // pause the audio player
                     document.querySelector("#audio").pause();
                 }
                 return;
             }
 
             if(e.target && e.target.classList.contains("move-up")){
-                // get the parent li of the move-up button that was clicked
                 var li = e.target.parentNode.parentNode;
-                // get the previous li of the parent li
                 var prevLi = li.previousElementSibling;
-                // if there is a previous li
                 if(prevLi){
-                    // insert the parent li before the previous li
                     prevLi.parentNode.insertBefore(li, prevLi);
                 }
             }
         
-             //when the move-down button is clicked move the song down in the playlist
             if(e.target && e.target.classList.contains("move-down")){
-                // get the parent li of the move-down button that was clicked
                 var li = e.target.parentNode.parentNode;
-                // get the next li of the parent li
                 var nextLi = li.nextElementSibling;
-                // if there is a next li
                 if(nextLi){
-                    // insert the parent li after the next li
                     nextLi.parentNode.insertBefore(li, nextLi.nextElementSibling);
                 }
             }
-
-
-
-
-             // when the delete button is clicked remove the parent li from the playlist
 
             if(e.target && e.target.classList.contains("delete")){
                 if(e.target && e.target.parentNode.parentNode.classList.contains("active")){
@@ -445,126 +401,86 @@ li a:link, li a:visited, li a:hover{
                 }
                 e.target.parentNode.parentNode.remove();
             }
+
             if(e.target && e.target.classList.contains("play")){
-                // get the data-src attribute from the song that was clicked
                 var song = e.target.parentNode.parentNode.getAttribute("data-src");
-                // set the src attribute of the audio player to the data-src attribute of the song that was clicked
                 document.querySelector("#audio").setAttribute("src", song);
-                // set the text of the current song to the filename of the song that was clicked from div with the class of filename
                 document.querySelector("#current-song").innerHTML = e.target.parentNode.parentNode.querySelector(".filename").innerHTML;
-                // remove the active class from the current song
                 if(document.querySelector("#playlist li.active")) {
                     document.querySelector("#playlist li.active").classList.remove("active");
                 }
-                // add the active class to the song that was clicked
                 e.target.parentNode.parentNode.classList.add("active");
-                // tell the player to play the song that was clicked when loaded
                 document.querySelector("#audio").play();
 
 
             }
+
             if(e.target && e.target.id == "other-directories"){
 
                 document.querySelector("#other-directories").classList.add("hidden");
-                //remove 'hidden' class from dir-dialog
                 document.querySelector("#dir-dialog").classList.remove("hidden");
-                //add hidden to playlist
                 document.querySelector("#playlist").classList.add("hidden");
-                //add hidden class to other-directories
                 document.querySelector("#other-directories").classList.add("hidden");
-                //remove hidden class from close-button
                 document.querySelector("#close-button").classList.remove("hidden");      
             }
            
             if(e.target && e.target.id == "close-button"){
-                //add 'hidden' class to dir-dialog
                 document.querySelector("#dir-dialog").classList.add("hidden");
-                //remove hidden from playlist
                 document.querySelector("#playlist").classList.remove("hidden");
-                //remove hidden class from other-directories
                 document.querySelector("#other-directories").classList.remove("hidden");
-                //add hidden class to close-button
                 document.querySelector("#close-button").classList.add("hidden");
              }
-           
-
         });
 
-        //write a function to listen for keyboard events
         document.addEventListener("keydown", function(e){
-            // if the spacebar is pressed
+            // Spacebar
             if(e.keyCode == 32){
+                // if the player is focused spacebar will act on it and will toggle twice
                 if( document.querySelector("#audio") === document.activeElement){
                     return;
                 }
                 let isPaused = document.querySelector("#audio").paused;
-                // if the audio player is paused
                 if(isPaused){
-                    // play the audio player
                     document.querySelector("#audio").play();
                 }else{
-                    // pause the audio player
                     document.querySelector("#audio").pause();
                 }
             }
-            // if the right arrow is pressed
+            // right arrow
             if(e.keyCode == 39){
-                // get the current time of the audio player
                 var currentTime = document.querySelector("#audio").currentTime;
-                // add 10 seconds to the current time
                 var newTime = currentTime + 5;
-                // set the current time of the audio player to the new time
                 document.querySelector("#audio").currentTime = newTime;
             }
-            // if the left arrow is pressed
+            // left arrow
             if(e.keyCode == 37){
-                // get the current time of the audio player
                 var currentTime = document.querySelector("#audio").currentTime;
-                // subtract 10 seconds from the current time
                 var newTime = currentTime - 5;
-                // set the current time of the audio player to the new time
                 document.querySelector("#audio").currentTime = newTime;
             }
-
+            // l
             if(e.keyCode == 76){
-                // get the current time of the audio player
                 var currentTime = document.querySelector("#audio").currentTime;
-                // add 10 seconds to the current time
                 var newTime = currentTime + 10;
-                // set the current time of the audio player to the new time
                 document.querySelector("#audio").currentTime = newTime;
             }
-            // if the left arrow is pressed
+            // j
             if(e.keyCode == 74){
-                // get the current time of the audio player
                 var currentTime = document.querySelector("#audio").currentTime;
-                // subtract 10 seconds from the current time
                 var newTime = currentTime - 10;
-                // set the current time of the audio player to the new time
                 document.querySelector("#audio").currentTime = newTime;
             }
-
-
-            // if the up arrow is pressed raise the player volume
+            // up arrow
             if(e.keyCode == 38){
-                // get the current volume of the audio player
                 var currentVolume = document.querySelector("#audio").volume;
-                // add .1 to the current volume
                 var newVolume = currentVolume + .1;
-                // if the new volume is greater than 1
                 if(newVolume > 1){
-                    // set the new volume to 1
                     newVolume = 1;
                 }
-                // set the volume of the audio player to the new volume
                 document.querySelector("#audio").volume = newVolume;
             }
-           
-            
-
-            // if the down arrow is pressed lower the player volume
+            // down arrow
             if(e.keyCode == 40){
-                // get the current volume of the audio player
                 var currentVolume = document.querySelector("#audio").volume;
                 // subtract .1 from the current volume
                 var newVolume = currentVolume - .1;
