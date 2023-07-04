@@ -171,9 +171,11 @@ li a:link, li a:visited, li a:hover{
             <?php 
             ini_set('display_errors', 1);
             $files = glob("*.{mp3,ogg,m4a,wav,flac,aac,webm,opus}", GLOB_BRACE);
+// SORT THE CONTENTS BY MODIFICATION TIME
             array_multisort(array_map('filemtime', $files), SORT_NUMERIC, SORT_DESC, $files);
+// SORT THE CONTENTS BY FILENAME
+            //array_multisort(array_map('basename', $files), SORT_ASC, $files);            
 
-            // make if statement if the array length <0
             if(count($files) < 0){
                 echo "<li>No files found</li>"; 
                 }else{
